@@ -1,0 +1,28 @@
+Package: gelClust
+Type: Package
+Title: Clustering and pathway analysis using exponential distributions
+Version: 0.1.0
+Author: Anooj Arkatkar
+Maintainer: Anooj Arkatkar <arkatkar@msu.edu>
+Description: Clustering and pathway analysis of omics data is performed by
+    the use of an exponentially distributed association/dissimilarity measure.
+    This package assumes null-distributed inter-cluster associations and forms 
+    pathways that minimize any null-distributed linking associations between
+    elements.
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Imports:
+    Rcpp (>= 1.0.7),
+    coop,
+    Rfast,
+    cluster,
+    ggplot2,
+    umap,
+    scales,
+    igraph,
+    data.table,
+    corpcor
+Depends: R (>= 3.5.0)
+biocViews: Clustering, Software
+LinkingTo: Rcpp, RcppEigen

@@ -1,0 +1,16 @@
+useDynLib(gelClust)
+importFrom(Rcpp, evalCpp)
+importFrom("stats", "cor", "pgamma", "prcomp", "pt", "sd",
+                "weighted.mean")
+export(gelMatrix)
+export(gammaCluster)
+export(gammaPlot)
+export(gammaTest)
+export(expMST)
+export(minPath)
+export(eigenGenes)
+export(gelDiff)
+export(distBoot)
+export(pBoot)
+
+
