@@ -6,11 +6,13 @@ export(gelMatrix)
 export(gammaCluster)
 export(gammaPlot)
 export(gammaTest)
+export(gelSVD)
 export(expMST)
 export(minPath)
 export(eigenGenes)
 export(gelDiff)
 export(distBoot)
 export(pBoot)
+export(subClusters)
 
 
