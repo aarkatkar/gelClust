@@ -136,18 +136,30 @@ gelMatrix <- function(x,
     return(rxy)
 }
 
-gelSVD <- function(x, k, excludeFirst=FALSE){
+gelSVD <- function(x, k, excludeFirst=FALSE, unsigned=FALSE){
     x.standard <- (x - rowMeans(x))/apply(x, 1, sd)
     sv <- svd(x.standard, nu=k, nv=k)
-    ppos <- colSums(ifelse(sv$u<0,0,sv$u))/colSums(abs(sv$u))
-    vexp <- c(ppos*(sv$d[1:k]^2), (1-ppos)*(sv$d[1:k]^2))
-    V <- rbind(t(sv$v), -t(sv$v))
+    if (unsigned){
+        vexp <- sv$d[1:k]^2
+        V <- t(sv$v)
+    }else{
+        ppos <- colSums(ifelse(sv$u<0,0,sv$u))/colSums(abs(sv$u))
+        vexp <- c(ppos*(sv$d[1:k]^2), (1-ppos)*(sv$d[1:k]^2))
+        V <- rbind(t(sv$v), -t(sv$v))
+    }
+
     rexp <- rank(vexp, ties.method="first")
-    if (excludeFirst){
+    if (excludeFirst & unsigned){
+        eg <- V[which.max(vexp),]
+        selected <- which(rexp<k)
+    }else if (excludeFirst & !unsigned){
         eg <- V[which.max(vexp),]
         selected <- which(rexp>k&rexp<(2*k))
     }
-    else{
+    else if (unsigned){
+        eg <- NULL
+        selected <- which(rexp>0)
+    }else{
         eg <- NULL
         selected <- which(rexp>k)
     }

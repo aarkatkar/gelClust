@@ -57,7 +57,8 @@ gammaPlot <- function(gm, clusters) {
         ggplot2::theme_classic()
 }
 
-gammaTest <- function(x, gm, rbound, maxiter = 200, plot.show=TRUE, excludeFirst=FALSE) {
+gammaTest <- function(x, gm, rbound, maxiter = 200, plot.show=TRUE, excludeFirst=FALSE,
+                      unsigned=FALSE) {
     A <- -log(gm)
     diag(A) <- 0
 
@@ -68,7 +69,7 @@ gammaTest <- function(x, gm, rbound, maxiter = 200, plot.show=TRUE, excludeFirst
     }
     clustScores <- vapply(n,
                           function(n_)
-                              .gammaEval(x, A, n_, maxiter, excludeFirst),
+                              .gammaEval(x, A, n_, maxiter, excludeFirst, unsigned),
                           numeric(2))
     scores <- clustScores[1,]
     convergence <- clustScores[2,]
@@ -82,7 +83,7 @@ gammaTest <- function(x, gm, rbound, maxiter = 200, plot.show=TRUE, excludeFirst
             n,
             scores,
             xlab = "number of clusters",
-            ylab = "log-likelihood",
+            ylab = "Model Fit",
             pch = pch,
             col = p.color
         )
@@ -90,14 +91,13 @@ gammaTest <- function(x, gm, rbound, maxiter = 200, plot.show=TRUE, excludeFirst
     return(scores)
 }
 
-.gammaEval <- function(x, A, n, maxiter, excludeFirst) {
-    m <- gelSVD(x, n, excludeFirst)
+.gammaEval <- function(x, A, n, maxiter, excludeFirst, unsigned=FALSE) {
+    m <- gelSVD(x, n, excludeFirst, unsigned)
 
     opGamma <- .optimizeGamma(m, A, maxiter)
     m <- opGamma$membership
     converged <- opGamma$converged
-    mtot <- log(colSums(m^2))
-    mpe<- sum(mtot)
+    mpe <- mean(log(Rfast::colsums(m^2)))
     return(c(mpe, converged))
 }
 
@@ -125,8 +125,8 @@ subClusters <- function(x, clust, rbound, squared=FALSE, z=NULL, maxiter=200){
         x.sub <- x[clust$labels==n,]
         gm <- gelMatrix(x.sub, z=rbind(z, eg[n,]), squared=squared)
         scores <- gammaTest(x.sub, gm, rbound, maxiter, plot.show=FALSE, excludeFirst=TRUE)
-        n.optimal <- which.max(scores)+2
-        me <- gelSVD(x.sub, n.optimal, excludeFirst=TRUE)
+        n.optimal <- which.max(scores)+1
+        me <- gelSVD(x.sub, n.optimal+1, excludeFirst=TRUE)
         subclusts <- gammaCluster(gm, me, maxiter)
         x.blank[clust$labels==n] <-(n-1)*rbound + subclusts$labels
     }

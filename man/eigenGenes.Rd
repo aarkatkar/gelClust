@@ -29,7 +29,7 @@ eigenGenes(x, m)
   representations of each cluster.
 }
 \references{
-%% ~put references to the literature/web site here ~
+Langfelder, P., & Horvath, S. (2007). Eigengene networks for studying the relationships between co-expression modules. BMC systems biology, 1(1), 1-17.
 }
 \author{
 Anooj Arkatkar

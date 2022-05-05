@@ -1,0 +1,47 @@
+---
+title: "PaperResults"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{PaperResults}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+First, the `gelClust` library is loaded along with a dataset consisting of the TCDD-induced fold change in expression of 932 DEGs across 14 mouse strains and three traits: TCDD burden, change in fat percentage, and change in body weight gain.
+
+```{r setup}
+library(gelClust)
+data(foldChange)
+data(traitData)
+```
+
+Then, the number of clusters for signed gamma clustering is selected through maximization of the log-likelihood function. This is chosen in a range from 2 up to the number of samples.
+
+```{r}
+gm <- gelMatrix(foldChange)
+score <- gammaTest(foldChange, gm, rbound=14)
+```
+
+As observed, the optimal number of clusters is 7. We can view these clusters with the `gammaPlot` function.
+```{r}
+m <- gelSVD(foldChange, 7)
+clust <- gammaCluster(gm, m)
+
+set.seed(2)
+gammaPlot(gm, clust$labels)
+```
+
+Within each of these clusters, we can further obtain sub-clusters such that genes from distinct sub-clusters within the same primary cluster are uncorrelated after controlling for the cluster itself.
+```{r}
+sub.clust <- subClusters(foldChange, clust, 10)
+table(sub.clust$labels)
+```
+
+

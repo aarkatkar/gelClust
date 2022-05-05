@@ -36,7 +36,7 @@
 %%  ~~ reference to a publication or URL from which the data were obtained ~~
 }
 \references{
-%%  ~~ possibly secondary sources and usages ~~
+Jurgelewicz, A., et al. (2021). Genetics-Based Approach to Identify Novel Genes Regulated by the Aryl Hydrocarbon Receptor in Mouse Liver. Toxicological Sciences, 181(2), 285-294
 }
 \examples{
 data(traitData)

@@ -27,7 +27,7 @@ gammaPlot(gm, clusters)
 a plot of features placed according to UMAP and colored according to gamma clustering.
 }
 \references{
-%% ~put references to the literature/web site here ~
+McInnes, L., Healy, J., & Melville, J. (2018). Umap: Uniform manifold approximation and projection for dimension reduction. arXiv preprint arXiv:1802.03426.
 }
 \author{
 Anooj Arkatkar
